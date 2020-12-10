@@ -22,6 +22,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('get-data/', views.getdata),
     path('hello-data/', views.hello_world),
-    path('city-view/<int:pk>/', CityList.as_view()),
+    path('city-view/', CityList.as_view()),
     path('city-detail/<int:pk>/', CityDetail.as_view()),
 ]

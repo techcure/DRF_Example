@@ -49,17 +49,29 @@ def hello_world(request):
 
 class CityList(APIView):
 
-    def get(self, request, format=None):
+    # def get_object(self, pk, *args, **kwargs):
+    #     try:
+    #         return City.objects.get(pk=pk)
+    #     except City.DoesNotExist:
+    #         raise Http404
+
+    def get(self, request, format=None, *args, **kwargs):
+        # city_obj = self.get_object(pk)
         city_obj = City.objects.all()
-        serializer = CitySerializer(city_obj, many=True)
+        serializer = CitySerializer(city_obj)
+
         return Response(serializer.data)
 
-    def post(self, request, format=None):
-        serializer = CitySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, format=None, *args, **kwargs):
+        if request.method == 'POST':
+            serializer = CitySerializer(data=request.data)
+            # import pdb;pdb.set_trace()
+            if serializer.is_valid():
+                serializer.save()
+                print(serializer)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CityDetail(APIView):
@@ -80,6 +92,7 @@ class CityDetail(APIView):
         serializer = CitySerializer(city_obj, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

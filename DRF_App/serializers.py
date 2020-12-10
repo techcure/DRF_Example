@@ -29,8 +29,18 @@ class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = '__all__'
-    ...
+
     def get_city(self, obj):
         queryset = City.objects.filter(owner=obj)
         city = CitySerializer(queryset, many=True, context=self.context).data
         return city
+
+    def update(self, instance, validated_data):
+        instance.Name = validated_data.get('Name',instance.Name)
+        instance.Province = validated_data.get('Province',instance.Province)
+
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        return City.objects.create(**validated_data)
